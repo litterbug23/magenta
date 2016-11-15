@@ -32,4 +32,30 @@ static inline mx_handle_t _mx_process_self(void) {
   return __magenta_process_self;
 }
 
+#ifndef WITHOUT_COMPAT_SYSCALLS
+
+#define mx_process_map_vm _mx_process_map_vm
+static inline mx_status_t _mx_process_map_vm(mx_handle_t proc_handle, mx_handle_t vmo_handle,
+                               uint64_t offset, mx_size_t len, uintptr_t* ptr, uint32_t options) {
+
+    if (!(options & MX_VM_FLAG_SPECIFIC)) {
+        *ptr = 0;
+    }
+    return mx_vmar_map(proc_handle, *ptr, vmo_handle, offset, len, options, (void**)ptr);
+}
+
+#define mx_process_unmap_vm _mx_process_unmap_vm
+static inline mx_status_t _mx_process_unmap_vm(mx_handle_t proc_handle, uintptr_t address, mx_size_t len) {
+    return mx_vmar_unmap(proc_handle, address, len);
+}
+
+#define mx_process_protect_vm _mx_process_protect_vm
+static inline mx_status_t _mx_process_protect_vm(mx_handle_t proc_handle, uintptr_t address, mx_size_t len,
+                                   uint32_t prot) {
+    return mx_vmar_protect(proc_handle, address, len, prot);
+}
+
+#endif // WITHOUT_COMPAT_SYSCALLS
+
+
 __END_CDECLS

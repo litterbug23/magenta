@@ -13,7 +13,7 @@ TODO
 The process object is a container of the following resources:
 
 + [Handles](../handles.md)
-+ Memory regions
++ [Virtual Memory Address Regions](vm_address_region.md)
 + [Threads](thread.md)
 
 In general, it is associated with code which it is executing until it is
@@ -31,6 +31,3 @@ its execution begins with `sys_process_start()`.
 
 [process_create](../syscalls/process_create.md)
 [process_start](../syscalls/process_start.md)
-[process_map_vm](../syscalls/process_map_vm.md)
-[process_unmap_vm](../syscalls/process_unmap_vm.md)
-[process_protect_vm](../syscalls/process_protect_vm.md)

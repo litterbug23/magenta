@@ -258,7 +258,7 @@ bool vmo_resize_test() {
 }
 
 static bool rights_test_map_helper(mx_handle_t vmo, size_t len, uint32_t flags, bool expect_success, mx_status_t fail_err_code, const char *msg) {
-    uintptr_t ptr;
+    uintptr_t ptr = 0;
 
     mx_status_t r = mx_process_map_vm(mx_process_self(), vmo, 0, len, &ptr, flags);
     if (expect_success) {

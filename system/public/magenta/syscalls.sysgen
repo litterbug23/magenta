@@ -169,26 +169,12 @@ syscall interrupt_complete
 
 syscall process_create
     (job: mx_handle_t, name: char[name_len] IN, name_len: uint32_t, flags: uint32_t,
-        out: mx_handle_t[1] OUT)
+        proc_handle: mx_handle_t[1] OUT, vmar_handle: mx_handle_t[1] OUT)
     returns (mx_status_t);
 
 syscall process_start
     (process_handle: mx_handle_t, thread_handle: mx_handle_t, entry: uintptr_t,
         stack: uintptr_t, arg_handle: mx_handle_t, arg2: uintptr_t)
-    returns (mx_status_t);
-
-syscall process_map_vm
-    (proc_handle: mx_handle_t, vmo_handle: mx_handle_t,
-        offset: uint64_t, len: mx_size_t, ptr: uintptr_t[1] OUT, flags: uint32_t)
-    returns (mx_status_t);
-
-syscall process_unmap_vm
-    (proc_handle: mx_handle_t, address: uintptr_t, len: mx_size_t)
-    returns (mx_status_t);
-
-syscall process_protect_vm
-    (proc_handle: mx_handle_t, address: uintptr_t, len: mx_size_t,
-        prot: uint32_t)
     returns (mx_status_t);
 
 # Shared between process and threads
@@ -249,6 +235,32 @@ syscall vmo_set_size
 syscall vmo_op_range
     (handle: mx_handle_t, op: uint32_t, offset: uint64_t, size: uint64_t,
         buffer: any[buffer_size] INOUT, buffer_size: mx_size_t)
+    returns (mx_status_t);
+
+# Address space management
+
+syscall vmar_allocate
+    (parent_vmar_handle: mx_handle_t, offset: mx_size_t, size: mx_size_t, flags: uint32_t,
+        child_vmar: mx_handle_t[1] OUT, child_addr: any[1] OUT)
+     returns (mx_status_t);
+
+syscall vmar_destroy
+    (vmar_handle: mx_handle_t)
+    returns (mx_status_t);
+
+syscall vmar_map
+    (vmar_handle: mx_handle_t, vmar_offset: mx_size_t,
+        vmo_handle: mx_handle_t, vmo_offset: uint64_t,
+        len: mx_size_t, flags: uint32_t, mapped_addr: any[1] OUT)
+    returns (mx_status_t);
+
+syscall vmar_unmap
+    (vmar_handle: mx_handle_t, offset: mx_size_t, len: mx_size_t)
+    returns (mx_status_t);
+
+syscall vmar_protect
+    (vmar_handle: mx_handle_t, offset: mx_size_t, len: mx_size_t,
+        prot: uint32_t)
     returns (mx_status_t);
 
 # temporary syscalls to access port and memory mapped devices
