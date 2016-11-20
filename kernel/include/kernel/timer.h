@@ -11,6 +11,7 @@
 #include <magenta/compiler.h>
 #include <list.h>
 #include <sys/types.h>
+#include <kernel/spinlock.h>
 
 __BEGIN_CDECLS;
 
@@ -30,6 +31,9 @@ typedef struct timer {
 
     timer_callback callback;
     void *arg;
+
+    volatile int active_cpu; // <0 if inactive
+    volatile bool cancel;    // true if cancel is pending
 } timer_t;
 
 #define TIMER_INITIAL_VALUE(t) \
@@ -40,6 +44,8 @@ typedef struct timer {
     .periodic_time = 0, \
     .callback = NULL, \
     .arg = NULL, \
+    .active_cpu = -1, \
+    .cancel = false, \
 }
 
 /* Rules for Timers:

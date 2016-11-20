@@ -175,6 +175,8 @@ int sys_log_create(uint32_t flags) {
 int sys_log_write(mx_handle_t log_handle, uint32_t len, user_ptr<const void> ptr, uint32_t flags) {
     LTRACEF("log handle %d, len 0x%x, ptr 0x%p\n", log_handle, len, ptr.get());
 
+    return NO_ERROR;
+
     if (len > DLOG_MAX_ENTRY)
         return ERR_OUT_OF_RANGE;
 

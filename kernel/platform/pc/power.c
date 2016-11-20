@@ -54,7 +54,7 @@ void platform_halt(
     printf("Halted\n");
 
 #if WITH_LIB_DEBUGLOG
-    dlog_bluescreen();
+    //dlog_bluescreen();
 #endif
 
 #if ENABLE_PANIC_SHELL
